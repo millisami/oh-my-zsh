@@ -16,6 +16,7 @@ unsetopt correct_all
 # Example aliases
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
+
 ZSH_THEME="millisami"
 
 export ZSH_THEME="millisami"
