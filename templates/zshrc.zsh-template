@@ -47,4 +47,5 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 # RVM loading
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+# Had to comment it since when using with the vagrant, it was causing problem
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
