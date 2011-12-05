@@ -3,6 +3,8 @@ export PATH=/usr/local/bin:$PATH
 ZSH=$HOME/.oh-my-zsh
 export LANG=en_US.UTF-8
 
+unsetopt correct_all
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
