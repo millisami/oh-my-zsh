@@ -1,0 +1,34 @@
+#!/bin/bash
+set -o errexit
+
+# Author: David Underhill
+# Script to permanently delete files/folders from your git repository.  To use
+# it, cd to your repository's root and then run the script with a list of paths
+# you want to delete.
+# Example: git-delete-history path1 path2
+
+if [ $# -eq 0 ]; then
+    exit 0are still
+fi
+
+# make sure we're at the root of git repo
+if [ ! -d .git ]; then
+    echo "Error: must run this script from the root of a git repository"
+    exit 1
+fi
+
+# remove all paths passed as arguments from the history of the repo
+files=$@
+git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch $files" HEAD
+
+# remove the temporary history git-filter-branch otherwise leaves behind for a long time
+rm -rf .git/refs/original/ && git reflog expire --expire=now --all && git gc --prune=now &&  git gc --aggressive --prune=now
+
+# http://help.github.com/remove-sensitive-data/
+# Dealing with collaborators
+#
+# You may have collaborators that pulled your tainted branch and created their own branches off of it. After they fetch your new branch, they will need to use git rebase on their own branches to rebase them on top of the new one. The collab should also ensure that their branch doesn’t reintroduce the file, as this will override the .gitignore file. Make sure your collab uses rebase and not merge, otherwise he will just reintroduce the file and the entire tainted history… and likely encounter some merge conflicts.
+#
+# Cached data on GitHub
+#
+# Be warned that force-pushing does not erase commits on the remote repo, it simply introduces new ones and moves the branch pointer to point to them. If you are worried about users accessing the bad commits directly via SHA1, you will have to delete the repo and recreate it. If the commits were viewed online the pages may also be cached. Check for cached pages after you recreate the repo, if you find any open a ticket on GitHub Support and provide links so staff can purge them from the cache.
