@@ -27,6 +27,11 @@ $(virtualenv_info)$(prompt_char) '
         RPROMPT='$(~/.rvm/bin/rvm-prompt)'
     fi
 
+    rbenvdir=$HOME/.rbenv
+    if [ -d $rbenvdir ] ; then
+        RPROMPT="$(rbenv version-name)"
+    fi
+
     # Displays different symbols (simultaneously) depending on the current status of your git repo.
     ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} ✚"
     ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} ✹"
