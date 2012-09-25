@@ -27,9 +27,16 @@ $(virtualenv_info)$(prompt_char) '
         RPROMPT='$(~/.rvm/bin/rvm-prompt)'
     fi
 
+    rbenv_gemset() {
+      rbenv-gemset active 2> /dev/null | sed -e 's/\(.*\)/@\1 /'
+    }
+    rbenv_version_and_gemset() {
+      echo "$(rbenv version-name)$(rbenv_gemset)"
+    }
+
     rbenvdir=$HOME/.rbenv
     if [ -d $rbenvdir ] ; then
-        RPROMPT="$(rbenv version-name)"
+        RPROMPT="$(rbenv_version_and_gemset)"
     fi
 
     # Displays different symbols (simultaneously) depending on the current status of your git repo.
