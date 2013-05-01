@@ -1,0 +1,54 @@
+#!/bin/bash
+set -o errexit
+
+#I wanted to have all the tables in a database that contains a certain field.
+#Here is the bash shell script I wrote:
+#This scripts returns all the tables in a database that contains some field
+
+function usage
+{
+echo "Usage: $0 USER DB COLUMN"
+}
+
+function ExistsColumn
+{
+local USER=$1
+local DB=$2
+local TABLE=$3
+local COLUMN=$4
+
+SEARCH_RESULT=$(mysqlshow -u ${USER} ${DB} ${TABLE} ${COLUMN} | awk '{ if ( NR == 5) print $2 }')
+if [ "${COLUMN}" = "${SEARCH_RESULT}" ];
+then
+echo "true";
+else
+echo "false";
+fi
+}
+
+function main
+{
+local USER=$1
+local DB=$2
+local COLUMN=$3
+
+if [[ "${USER}" = "" || "${DB}" = "" || "${COLUMN}" = "" ]];
+then
+usage
+exit 1
+fi
+
+all_tables=$(mysqlshow -u ${USER} ${DB} | \
+awk '{ if (NR >4 ) print $_}' | \
+sed -e 's/[|+-]//g; /^$/d ' | \
+xargs )
+for TABLE in ${all_tables}; do
+if [ "true" = "$(ExistsColumn $USER $DB $TABLE $COLUMN)" ];
+then
+echo $TABLE
+fi
+done
+
+}
+
+main $*
