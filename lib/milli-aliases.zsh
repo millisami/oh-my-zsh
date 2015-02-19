@@ -1,4 +1,3 @@
-alias gitx='open -a GitX .'
 alias b='bundle'
 alias bo='bundle open'
 
